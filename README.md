@@ -17,3 +17,16 @@ A repository for the Boutique Ado project website.
 9.  The initial Django migrations were run by typing 'python manage.py migrate' into the command.
 10. In order to log into Django's admin, a superuser was created using the command 'python manage.py createsuperuser' and then providing a username, email and password.
 11. The project was then committed to GitHub using the process in the Deployment section.
+
+### Allauth Setup
+
+In order to allow users to create an account, access their information, recover their account, verify that their account registration was successful and view personal order history, order confirmations and payment information, the Django Allauth package was installed to allow easy access to these functionalities.
+
+1. To install All Auth, a new terminal was opened and the following command was typed: 'pip install django-allauth'.
+2. From there, the request context processor was confirmed to be in 'settings.py'.
+3. In order to ensure that all necessary code was in place before using Allauth, multiple code blocks were copied from [this link](https://django-allauth.readthedocs.io/en/latest/installation.html) and pasted into 'setting,py'. These included:
+    -   The entire 'AUTHENTICATION_BACKENDS' list.
+    -   The following from 'INSTALLED_APPS': 'django.contrib.sites', 'allauth', 'allauth.account', 'allauth.socialaccount'.
+    -   'SITE_ID = 1' was pasted beneath the 'AUTHENTICATION_BACKENDS' list.
+4. The changes made were migrated using the command 'python manage.py migrate'.
+5. In order to facilitate social media authentication, the relevant code was added to the 'INSTALLED_APPS' section. The domain name was also changed in the Django admin to SITENAME.example.com, and the display name was changed to SITENAME.
