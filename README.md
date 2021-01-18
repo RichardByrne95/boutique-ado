@@ -30,3 +30,4 @@ In order to allow users to create an account, access their information, recover 
     -   'SITE_ID = 1' was pasted beneath the 'AUTHENTICATION_BACKENDS' list.
 4. The changes made were migrated using the command 'python manage.py migrate'.
 5. In order to facilitate social media authentication, the relevant code was added to the 'INSTALLED_APPS' section. The domain name was also changed in the Django admin to SITENAME.example.com, and the display name was changed to SITENAME.
+6. The Allauth templates were copied from Python's site-templates folder to our current project using the command 'xcopy C:\Users\Richard\AppData\Local\Programs\Python\Python39\Lib\site-packages\allauth\templates .templates\allauth /e'. This allows the templates to be customised to our liking.
