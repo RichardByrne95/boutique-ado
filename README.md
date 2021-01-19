@@ -31,3 +31,12 @@ In order to allow users to create an account, access their information, recover 
 4. The changes made were migrated using the command 'python manage.py migrate'.
 5. In order to facilitate social media authentication, the relevant code was added to the 'INSTALLED_APPS' section. The domain name was also changed in the Django admin to SITENAME.example.com, and the display name was changed to SITENAME.
 6. The Allauth templates were copied from Python's site-templates folder to our current project using the command 'xcopy C:\Users\Richard\AppData\Local\Programs\Python\Python39\Lib\site-packages\allauth\templates .templates\allauth /e'. This allows the templates to be customised to our liking.
+
+### Creating an App in Django
+
+Django apps were created using the following steps:
+
+1.  A new terminal was opened and the following command was run: 'python manage.py startapp APP_NAME'
+2.  A templates folder was created inside the new app using the command: 'md APP_NAME/templates/APP_NAME'
+3.  An 'index.html' file was created inside this last home folder and extended the base template using: '{% extends "base.html" %}'
+4.  The project-level 'urls.py' file was copied and pasted into the home app directory in order to provide a starting point for the home app.
