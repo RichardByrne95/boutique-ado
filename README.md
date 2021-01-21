@@ -16,7 +16,7 @@ A repository for the Boutique Ado project website.
 8.  The project's status was verified by running the command ```python manage.py runserver```, and exposing PORT 8000.
 9.  The initial Django migrations were run by typing ```python manage.py migrate``` into the command.
 10. In order to log into Django's admin, a superuser was created using the command ```python manage.py createsuperuser``` and then providing a username, email and password.
-11. The project was then committed to GitHub using the process in the Deployment section.
+11. The project was then committed to GitHub using the process outlined in the Deployment section.
 
 ### Allauth Setup
 
@@ -37,7 +37,7 @@ In order to allow users to create an account, access their information, recover 
 Django apps were created using the following steps (APP_NAME is a placeholder name):
 
 1.  A new terminal was opened and the following command was run: ```python manage.py startapp APP_NAME```
-2.  A templates folder to hold the HTML was created inside the new app using the command: ```md APP_NAME/templates/APP_NAME```
+2.  A templates folder to hold the HTML was created inside the new app using the command: ```md APP_NAME\templates\APP_NAME```
 3.  An 'index.html' file was created inside this second APP_NAME folder and extended the base template using: ```{% extends "base.html" %}```
 4.  In order to render the new 'index.html' file, a new view was created in the 'views.py' file within the APP_NAME folder.
 5.  The project-level 'urls.py' file was copied and pasted into the APP_NAME directory in order to provide a starting point for the APP_NAME app. A single empty path was added to indicate that this was the root url: ```path("", views.index, name='home')```.
@@ -64,3 +64,45 @@ urlpatterns = [
     existing_path...
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ```
+
+### Creating an App with Fixtures
+
+When an app was created that required creating database models, the following steps were executed:
+
+1.  The steps from the 'Creating an App in Django' section were executed.
+2.  The models were created using classes inside the 'models.py' file of the relevant app. An example of a model layout is as follows:
+``` python
+# Creates a Category class that inherits from the models.Model class
+class Category(models.Model):
+    # Adds a name field with a max length of 245 alpha-numeric characters
+    name = models.CharField(max_length=254)
+    # Add a frontend-friendly name that isn't required.
+    friendly_name = models.CharField(max_length=254, null=True, blank=True)
+
+    # Defines the '__str__' function so that it returns the name of the category
+    def __str__(self):
+        return self.name
+
+    # Returns the frontend-friendly name of the category
+    def get_friendly_name(self):
+        return self.friendly_name
+```
+3.  The relevant models were then registered within the app's 'admin.py' file by, first importing the model(s) using ````from .models import MODEL_NAME```, and then by typing ```admin.site.register(MODEL_NAME)```
+4.  The fixtures were then loaded by inputting the command: ```python manage.py loaddata FIXTURE_FILE_NAME``` (with no file extension). This was repeated for each fixture.
+
+
+### Migrating Changes in Django to the Database
+
+When changes were made to models within a Django app, these changes were have to be 'migrated' to the database being used to have an effect for the end user. This was done using the following steps:
+
+1.  A test run of the migrations was run using the command: ```python manage.py makemigrations --dry-run```
+2.  To check that there aren't any issues with the models that are being migrated, the following command was run: ```python manage.py migrate -- plan```
+3. When no issues were observed, the changes were migrated with the following command: ```python manage.py makemigrations``` followed by ```python manage.py migrate```
+
+
+
+
+
+
+
+Kaggle.com was used as the source for the fixtures used.
