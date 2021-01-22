@@ -88,7 +88,7 @@ class Category(models.Model):
         return self.friendly_name
 ```
 3.  The relevant models were then registered within the app's 'admin.py' file by, first importing the model(s) using ````from .models import MODEL_NAME```, and then by typing ```admin.site.register(MODEL_NAME)```
-4.  The fixtures were then loaded by inputting the command: ```python manage.py loaddata FIXTURE_FILE_NAME``` (with no file extension). This was repeated for each fixture.
+4.  The fixtures were then loaded by inputting the command: ```python manage.py loaddata FIXTURE_FILE_NAME``` This was repeated for each fixture.
 
 
 ### Migrating Changes in Django to the Database
@@ -98,6 +98,40 @@ When changes were made to models within a Django app, these changes were have to
 1.  A test run of the migrations was run using the command: ```python manage.py makemigrations --dry-run```
 2.  To check that there aren't any issues with the models that are being migrated, the following command was run: ```python manage.py migrate -- plan```
 3. When no issues were observed, the changes were migrated with the following command: ```python manage.py makemigrations``` followed by ```python manage.py migrate```
+
+### Customising the Django Admin
+
+Django's admin pages can be altered to correct things such as spelling mistakes or changing a record's visible name. These were done using the following steps:
+
+1.  If a Django admin had not been set up, a superuser was created using the command ```python manage.py createsuperuser``` and then providing a username, email and password.
+2.  Logged into Django's admin by running the command ```python manage.py runserver```, opening the exposed port in a brower, adding '/admin' to the end of the URL, and inputting admin credentials. From here, you can verify any error and changes you wish to make.
+3.  To adjust the visible name of a group of models, a Meta class was added within the relevant model in the 'models.py' class using the following code: 
+``` python
+class Meta:
+    verbose_name_plural = 'DISPLAY_NAME'
+```
+It's important to note that because the model itself is not being changed, this won't require migration.
+4.  To change the fields of a model that are displayed in the admin, within the app's 'admin.py' file, add and customise the following code:
+``` python
+# Create a class that inherits the ModelAdmin class
+class MODEL_NAMEAdmin(admin.ModelAdmin):
+    # list_display is a tuple that will tell the admin which fields to display
+    list_display = (
+        'name of field to display...',
+        'name of field to display...',
+        'name of field to display...',
+        'name of field to display...'
+    )
+
+    # Orders the records by chosen field (must be a tuple with a comma)
+    ordering = ('FIELD_NAME',)
+```
+5.  Lastly, the MODEL_NAMEAdmin was registered along with the model itself using the following code:
+``` python
+admin.site.register(MODEL_NAME, MODELNAMEAdmin)
+```
+
+
 
 
 
