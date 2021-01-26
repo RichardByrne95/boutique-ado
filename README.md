@@ -131,6 +131,36 @@ class MODEL_NAMEAdmin(admin.ModelAdmin):
 admin.site.register(MODEL_NAME, MODELNAMEAdmin)
 ```
 
+### Setting Up Search Functionality
+
+In order for the user to be able to perform search queries on the site, the following steps were executed:
+
+1.  A form element was set up in the relevant HTML page with a method of 'GET' and an action of "{% url 'VIEW_NAME' %}".
+2.  An input element with a type of text and a name of 'q' (for query) was added inside the form.
+3.  Within the 'views.py' file that contains the view referenced in the form element, the following code was added:
+``` python
+from django.db.models import Q
+from django.shortcuts import redirect, reverse
+from .models import Item_model_name
+
+items_of_interest = Item_model_name.objects.all()
+query = None
+
+if request.GET:
+        if 'q' in request.GET:
+            query = request.GET['q']
+            if not query:
+                messages.error(request, "You didn't enter any dear criteria!")
+                return redirect(reverse('products'))
+
+            queries = Q(name__icontains=query) | Q(description__icontains=query)
+            items_of_interest = items_of_interest.filter(queries)
+
+context = {
+    'items_of_interest': items_of_interest,
+    'search_term': query
+}
+```
 
 
 
