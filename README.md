@@ -139,10 +139,12 @@ In order for the user to be able to perform search queries on the site, the foll
 2.  An input element with a type of text and a name of 'q' (for query) was added inside the form.
 3.  Within the 'views.py' file that contains the view referenced in the form element, the following code was added:
 ``` python
+# Global Scope
 from django.db.models import Q
 from django.shortcuts import redirect, reverse
 from .models import Item_model_name
 
+# Within relevant view
 items_of_interest = Item_model_name.objects.all()
 query = None
 
@@ -162,6 +164,64 @@ context = {
 }
 ```
 
+### Filtering by Category
+
+In order to allow the user to filter by category, the following functionality was added. This code assumes that the items in questions have a category property.
+
+1.  The search feature from above was implemented for the relevant view.
+2.  Within the same 'views.py' file, the following code was added:
+```python
+
+# Global Scope
+from .models import Category
+
+categories = None
+
+if requests.GET:
+    if 'category' in request.GET:
+        categories = request.GET['category'].split(',')
+        items_of_interest = items_of_interest.filter(category__name__in=categories)
+        categories = Category.objects.filter(name__in=categories)
+    
+    context = {
+        'items_of_interest': items_of_interest,
+        'current_categories': categories
+    }
+```
+3.  From there, a link was set up within the appropriate HTML file that calls the relevant view including the category name in the URL. An example: ```{% url 'VIEW_NAME' %}?category=CATEGORY_NAME```
+
+### Sorting Items Functionality
+
+To allow the user to sort items, for example by price, rating or category, the following steps were taken:
+
+1.  The search functionality from above was first implemented.
+2.  A link was set up within the appropriate HTML file that calls the relevant view including the name of the sorting criteria in the URL. An example: ```{% url 'VIEW_NAME' %}?sort=price&direction=asc```
+3.  ```&direction=asc``` ensures that the items are sorted in ascending order.
+4.  From there, within the relevant 'views.py' file, the following code was added to the view called upon in the url from step 2:
+```python 
+sort = None
+direction = None
+
+if request.GET:
+    if 'sort' in request.GET:
+        sortkey = request.GET['sort']
+        sort = sortkey
+        if sortkey == 'name':
+            sortkey = 'lower_name'
+            items_of_interest = items_of_interest.annotate(lower_name=Lower('name'))
+        
+        if 'direction' in request.GET:
+            direction = request.GET['direction']
+            if direction == 'desc':
+                sortkey = f'-{sortkey}'
+        items_of_interest = items_of_interest.order_by(sortkey)
+
+current_sorting= f'{sort}_{direction}'
+
+context = {
+    'current_sorting': current_sorting   
+}
+```
 
 
 
