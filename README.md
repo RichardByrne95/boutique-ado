@@ -223,7 +223,29 @@ context = {
 }
 ```
 
+### Creating a Custom Template Filter
 
+A custom template filter was created using the following steps:
+
+1.  Within the relevant app, a new folder ws created called 'templatetags'.
+2.  Inside this folder, an '__init.py' file was created to ensure that this directory was treated as a Python package (making them available for imports and to use in templates).
+3.  A second file was created in this folder called 'APPNAMEtools.py'.
+4.  Within 'APPNAMEtools.py', 'template' from django was imported using: ```python from django import template```
+5.  Any desired filters were created as functions within this file.
+6.  They were then registered by first creating a register variable: ```python register = template.Library()```, and then placing a register filter decorator above each function. As an example:
+```python
+from django import template
+
+register = template.Library()
+
+@register.filter(name='filter_name')
+def filter_name(param1, param2)
+    return param1 + param2
+
+```
+7.  The custom filter was then able to be loaded within the relevant HTML template using '{% load APPNAMEtools %}'.
+8.  The filter was then able to be used via the pipe '|' within Django templating language i.e. '{{ param1 | filter:param2 }}'.
+9.  Any running server was restarted for the filter's functionality to become available.
 
 
 
