@@ -38,7 +38,7 @@ Django apps were created using the following steps (APP_NAME is a placeholder na
 
 1.  A new terminal was opened and the following command was run: ```python manage.py startapp APP_NAME```
 2.  A templates folder to hold the HTML was created inside the new app using the command: ```md APP_NAME\templates\APP_NAME```
-3.  An 'index.html' file was created inside this second APP_NAME folder and extended the base template using: ```{% extends "base.html" %}```
+3.  An 'index.html' file was created inside this second APP_NAME folder and extended the base template using: ```html {% extends "base.html" %}```
 4.  In order to render the new 'index.html' file, a new view was created in the 'views.py' file within the APP_NAME folder.
 5.  The project-level 'urls.py' file was copied and pasted into the APP_NAME directory in order to provide a starting point for the APP_NAME app. A single empty path was added to indicate that this was the root url: ```path("", views.index, name='home')```.
 6.  ```from . import views``` was used to import the views into this 'urls.py' file.
