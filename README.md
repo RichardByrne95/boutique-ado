@@ -247,7 +247,66 @@ def filter_name(param1, param2)
 8.  The filter was then able to be used via the pipe '|' within Django templating language i.e. '{{ param1 | filter:param2 }}'.
 9.  Any running server was restarted for the filter's functionality to become available.
 
+### Linking Objects through Foreign Keys and Ono-to-One Objects
 
+To allow different objects to have a defined relationship between one another, Foreign Keys and Ono-to-One Objects were used within the models of the objects to define and facilitate these relationships, using the following steps:
+
+1.  If models do not yet exist, they are created within the relevant app's 'models.py' file using the following code:
+```python
+from django.db import models
+# If using a country selector (install using 'pip install django-countries'):
+from django_countries.fields import CountryField
+# If creating a user model:
+from django.contrib.auth.models import User
+
+
+class ModelName(models.Model):
+    # (optional, used if you want to change the name displayed in the admin)
+    class Meta:
+        verbose_name_plural = 'Instance of model name that you want displayed in the admin'
+
+    boolean_example = models.BooleanField(default=False, null=True, blank=True)
+    price_example = models.DecimalField(max_digits=6, decimal_places=2)
+    url_example = models.URLField(max_length=1024, null=True, blank=True)
+    image_example = models.ImageField(null=True, blank=True)
+    
+    # If country selector:
+    country = CountryField(blank_label='Country *', null=True, blank=True)
+    # CharField needs max_length. 'null' states whether the attribute can be stored as Null in database. 
+    # 'blank' states whether it can be submitted as empty, e.g. through a form.
+    name = models.CharField(max_length=50, null=False, blank=False)
+    #TextField allows for a larger space in which to type.
+    description_example = models.TextField()
+
+    def __str__(self):
+        # Return whichever attribute will identify this object, name is  used as an example here.
+        return self.name
+
+```
+2.  In order to specify circumstances in which the objects of the models would be linked, either a ForeignKey or OneToOneField must be used. For example, when creating a user and a user profile model, the user model would be imported from django (see code below) and the user profile model would include a user OneToOneField so as each user can only have one profile and each profile can only be attached to one user. A ForeignKey acts the same as a OneToOneField, but without those limitations.
+```python
+# e.g. In User Profile Model file:
+# If creating a user:
+from django.contrib.auth.models import User
+
+# If user model, use a OneToOneField .
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+```
+3.  Then, you could create a parameter within another model to link with the ForeignKey/OneToOneField that you've just created. To continue our user example, see the code below:
+```python
+from django.db import models
+from profiles.models import UserProfile
+
+
+class Order(models.Model):
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name='orders')
+
+```
+    -   First, our model with the first ForeignKey/OneToOneField is imported into the 'models.py' file with our second model.
+    -   Then we link the two models with another ForeignKey/OneToOneField, setting the first argument to our imported model.
+    -   The '.SET_NULL' value will allows us to keep the order in the admin even if the user profile is deleted. It also allows 'null=True, blank=True' so that users that aren't logged in can still make an order.
+    -   In this scenario, the 'related_name' attribute allows us to call a something like 'user.user_profile.orders' to access a user's orders.
 
 
 
