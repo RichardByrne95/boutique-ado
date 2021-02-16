@@ -27,7 +27,7 @@ SECRET_KEY = 'ngade%#_i_z1(y0%4qx-*&@5az6eqaw!!aet&8w@j2_@fgv0&7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['richard-byrne-boutique-ado.heroku.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['richard-byrne-boutique-ado.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
